@@ -4,40 +4,81 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const Client = () => import('../views/client.vue')
-const Discover = () => import ('../views/discover.vue')
-const Friend = () => import ('../views/friend.vue')
-const Musician = () => import ('../views/musician.vue')
-const My = () => import ('../views/my.vue')
-const Shopping = () => import ('../views/shopping.vue')
+const Discover = () => import('../views/discover/discover.vue')
+const Friend = () => import('../views/friend.vue')
+const Musician = () => import('../views/musician.vue')
+const My = () => import('../views/my.vue')
+const Shopping = () => import('../views/shopping.vue')
+const Putaway = () => import('../views/discover/Child/putaway.vue')
+const Ranking = () => import('../views/discover/Child/ranking.vue')
+const Recommend = () => import('../views/discover/Child/recommend.vue')
+const Sing = () => import('../views/discover/Child/sing.vue')
+const Song = () => import('../views/discover/Child/song.vue')
+const Station = () => import('../views/discover/Child/station.vue')
+const Search = () => import('../views/search.vue')
 
 const routes = [
   {
     path: '/',
-    redirect : '/discover'
+    redirect: '/discover'
   },
   {
     path: '/client',
-    component : Client
+    component: Client
   },
   {
     path: '/discover',
-    component : Discover
+    component: Discover,
+    children: [
+      {
+        path: '/',
+        redirect: 'recommend'
+      },
+      {
+        path: 'putaway',
+        component: Putaway
+      },
+      {
+        path: 'ranking',
+        component: Ranking
+      },
+      {
+        path: 'recommend',
+        component: Recommend
+      },
+      {
+        path: 'sing',
+        component: Sing
+      },
+      {
+        path: 'song',
+        component: Song
+      },
+      {
+        path: 'station',
+        component: Station
+      }
+    ]
   },
-    {
+  {
     path: '/friend',
-    component : Friend
-  } ,
-    {
+    component: Friend
+  },
+  {
     path: '/musician',
-    component : Musician
+    component: Musician
   },
   {
     path: '/my',
-    component : My
+    component: My
   },
   {
     path: '/shopping',
-    component : Shopping
+    component: Shopping
+  },
+  {
+    path: '/search',
+    component: Search
   }
 ]
 

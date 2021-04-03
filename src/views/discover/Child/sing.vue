@@ -1,6 +1,6 @@
 <template>
   <div>
-    发现音乐
+    歌手
   </div>
 </template>
 

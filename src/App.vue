@@ -1,19 +1,39 @@
 <template>
   <div class="box">
-    <Header />
+    <Header :showLogin="showLogin" @show="show" />
+    <Login v-if="showLogin" @show="show" />
     <router-view />
+    <Play v-if="musicId" />
+    <!-- <Play /> -->
   </div>
 </template>
 
 <script>
 import Header from './components/Header'
+import Login from './components/Login'
+import Play from './components/Play'
+import { mapState } from 'vuex'
+
 export default {
+  data() {
+    return {
+      showLogin: false
+    }
+  },
   components: {
-    Header
+    Header,
+    Login,
+    Play
+  },
+  computed: {
+    ...mapState(['musicId'])
+  },
+  methods: {
+    show(isShow) {
+      this.showLogin = isShow
+    }
   }
 }
 </script>
 
-<style>
-@import url(./assets/css/base.css);
-</style>
+<style></style>
