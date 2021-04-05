@@ -26,7 +26,7 @@
           <div>
             <ul class="search_song" v-if="type == 1">
               <!-- class="geh"  隔行换色 -->
-              <li v-for="item in resList" :key="item.id">
+              <li v-for="item in resList" :class="{ currentPlay: musicId == item.id }" :key="item.id" @click="playMusic(item.id)">
                 <i class="iconfont icon-bofang"></i>
                 <span class="song_name">{{ item.name }}</span>
                 <span class="singer">{{ item.artists[0].name }}</span>
@@ -66,6 +66,7 @@
 
 <script>
 import Floor from '../components/Floor'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -79,6 +80,9 @@ export default {
   },
   components: {
     Floor
+  },
+  computed: {
+    ...mapState(['musicId'])
   },
   created() {
     this.key = this.$route.query.key
@@ -111,6 +115,11 @@ export default {
     toggle(i) {
       this.type = i
       this.getSongList()
+    },
+    playMusic(id) {
+      this.$store.dispatch('getMusic', id)
+      this.$store.dispatch('getMusicDetail', id)
+      this.$store.commit('SetMusicList', this.resList)
     }
   }
 }

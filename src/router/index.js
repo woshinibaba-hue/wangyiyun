@@ -16,6 +16,8 @@ const Sing = () => import('../views/discover/Child/sing.vue')
 const Song = () => import('../views/discover/Child/song.vue')
 const Station = () => import('../views/discover/Child/station.vue')
 const Search = () => import('../views/search.vue')
+const User = () => import('../views/User/index.vue')
+const SongList = () => import('../views/User/Chlid/SongList.vue')
 
 const routes = [
   {
@@ -79,6 +81,16 @@ const routes = [
   {
     path: '/search',
     component: Search
+  },
+  {
+    path: '/user',
+    component: User,
+    children: [
+      {
+        path: 'songlist',
+        component: SongList
+      }
+    ]
   }
 ]
 

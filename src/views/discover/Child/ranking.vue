@@ -76,7 +76,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr @click="playMusic(item.id)" :class="{ geh: (index + 1) % 2 == 0 }" v-for="(item, index) in playList.tracks" :key="item.id">
+                <tr @click="playMusic(item.id)" :class="{ geh: (index + 1) % 2 == 0, currentPlay: musicId == item.id }" v-for="(item, index) in playList.tracks" :key="item.id">
                   <td class="ranking">
                     {{ index + 1 }}
                     <i class="u-icon jt-icon"></i>
@@ -85,7 +85,7 @@
                     <div class="song">
                       <img v-if="index + 1 <= 3" :src="item.al.picUrl" alt="" class="song-img" />
                       <i class="iconfont icon-bofang bofang"></i>
-                      <span class="song-name">{{ item.al.name }}</span>
+                      <span class="song-name">{{ item.name }}</span>
                     </div>
                   </td>
                   <td class="song-date">
@@ -107,6 +107,7 @@
 
 <script>
 import Floor from '../../../components/Floor'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -115,6 +116,9 @@ export default {
       currentId: 19723756, // 当前点击的榜单id
       playList: {} // 榜单详情
     }
+  },
+  computed: {
+    ...mapState(['musicId'])
   },
   components: {
     Floor
@@ -138,12 +142,12 @@ export default {
     // 获取榜单歌曲
     async getTopDetails(id) {
       const { playlist } = await this.$http.get('/playlist/detail', { params: { id } })
-      this.$store.commit('SetMusicList', playlist.tracks)
       this.playList = playlist
     },
     // 点击歌曲播放音乐
-    async playMusic(id) {
+    playMusic(id) {
       this.$store.dispatch('getMusic', id)
+      this.$store.commit('SetMusicList', this.playList.tracks)
     }
   }
 }

@@ -99,6 +99,7 @@ export default {
       } else {
         this.showMessage('登录成功', 'success')
         this.$emit('show', false)
+        this.$store.commit('SetUserInfo', res)
       }
     },
     // 弹窗消息

@@ -15,21 +15,54 @@
         <input v-model="search" class="input" v-on:keyup.enter="toSearch" placeholder="音乐/视频/电台/用户" />
         <span class="creation">创作者中心</span>
       </div>
-      <div class="login">
-        <p @click="login">登录</p>
+      <div v-if="UserInfo.isLogin" class="avatar" @click="click">
+        <img :src="UserInfo.profile.avatarUrl" alt="" />
+      </div>
+      <div class="login" v-else>
+        <p class="login-btn" @click="login">登录</p>
+      </div>
+      <div class="login-avatar" v-if="isShow">
+        <ul>
+          <li @click="goUser">
+            <p><i class="iconfont icon-icon-test"></i> 我的主页</p>
+          </li>
+          <li>
+            <p><i class="iconfont icon-xiaoxi"></i> 我的消息</p>
+          </li>
+          <li>
+            <p><i class="iconfont icon-dengji"></i> 我的等级</p>
+          </li>
+          <li>
+            <p><i class="iconfont icon-VIP"></i> VIP会员</p>
+          </li>
+          <li>
+            <p><i class="iconfont icon-shezhi"></i> 个人设置</p>
+          </li>
+          <li>
+            <p><i class="iconfont icon-kefujingli-"></i> 实名认证</p>
+          </li>
+          <li>
+            <p><i class="iconfont icon-guanji"></i> 退出</p>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: ['showLogin'],
   data() {
     return {
       path: '',
-      search: ''
+      search: '',
+      isShow: false
     }
+  },
+  computed: {
+    ...mapState(['UserInfo'])
   },
   methods: {
     // 点击导航跳转指定路由
@@ -49,6 +82,12 @@ export default {
         return
       }
       this.$router.push(`/search?key=${this.search}`)
+    },
+    click() {
+      this.isShow = !this.isShow
+    },
+    goUser() {
+      this.$router.push('/user')
     }
   }
 }
@@ -138,14 +177,58 @@ export default {
   opacity: 1;
 }
 .login {
-  cursor: pointer;
-  opacity: 0.5;
-  color: #fff;
   font-size: 14px;
   line-height: 70px;
   margin-left: -50px;
 }
-.login:hover {
-  opacity: 0.8;
+.login-btn {
+  opacity: 0.5;
+  color: #fff;
+}
+.login-btn:hover {
+  opacity: 1;
+}
+.avatar {
+  position: absolute;
+  right: 220px;
+  top: 22px;
+  width: 30px;
+  height: 30px;
+}
+.avatar img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.avatar:hover .login-avatar {
+  display: block;
+}
+.login-avatar {
+  position: absolute;
+  right: 155px;
+  top: 60px;
+  width: 120px;
+  height: 200px;
+  background-color: #2b2b2b;
+  color: #ccc;
+  font-size: 12px;
+  z-index: 6;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.iconfont {
+  margin-right: 5px;
+}
+.login-avatar ul li {
+  padding: 5px 10px;
+  cursor: pointer;
+  text-align: center;
+}
+.login-avatar ul li:nth-child(7) {
+  margin-left: -26px;
+}
+.login-avatar ul li:hover {
+  background-color: #353535;
+  color: #fff;
 }
 </style>

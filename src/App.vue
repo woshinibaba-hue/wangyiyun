@@ -4,7 +4,6 @@
     <Login v-if="showLogin" @show="show" />
     <router-view />
     <Play v-if="musicId" />
-    <!-- <Play /> -->
   </div>
 </template>
 

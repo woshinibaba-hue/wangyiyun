@@ -10,10 +10,11 @@ export default {
   },
   // 当前播放音乐的信息
   SetPlayMusic(state, payload) {
-    state.musicList.forEach(item => {
-      if (item.id == payload) {
-        state.playMuisc = item
-      }
-    })
+    state.playMuisc = payload
+  },
+  // 当前用户登录信息
+  SetUserInfo(state, payload) {
+    state.UserInfo = payload
+    state.UserInfo.isLogin = true
   }
 }

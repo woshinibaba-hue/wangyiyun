@@ -25,3 +25,12 @@ i {
   background-color: #fff;
   border: 1px solid #ccc;
 }
+.u-icon2 {
+  background: url(../images/icon2.png) no-repeat 0 999999px;
+}
+.gehang {
+  background-color: #f7f7f7;
+}
+.currentPlay {
+  color: #c10d0c !important;
+}

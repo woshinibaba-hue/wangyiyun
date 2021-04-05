@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Loading } from 'element-ui'
+import store from '../store/index'
 
 axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.withCredentials = true
 
 let loadingInstance = null
 // 配置axios请求拦截器
