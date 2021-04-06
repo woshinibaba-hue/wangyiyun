@@ -7,7 +7,7 @@ const Client = () => import('../views/client.vue')
 const Discover = () => import('../views/discover/discover.vue')
 const Friend = () => import('../views/friend.vue')
 const Musician = () => import('../views/musician.vue')
-const My = () => import('../views/my.vue')
+const MyMusic = () => import('../views/MyMusic/index.vue')
 const Shopping = () => import('../views/shopping.vue')
 const Putaway = () => import('../views/discover/Child/putaway.vue')
 const Ranking = () => import('../views/discover/Child/ranking.vue')
@@ -18,6 +18,8 @@ const Station = () => import('../views/discover/Child/station.vue')
 const Search = () => import('../views/search.vue')
 const User = () => import('../views/User/index.vue')
 const SongList = () => import('../views/User/Chlid/SongList.vue')
+const SongDetails = () => import('../views/SongDetails/index.vue')
+const Daily = () => import('../views/Daily/index.vue')
 
 const routes = [
   {
@@ -71,8 +73,8 @@ const routes = [
     component: Musician
   },
   {
-    path: '/my',
-    component: My
+    path: '/mymusic',
+    component: MyMusic
   },
   {
     path: '/shopping',
@@ -91,6 +93,14 @@ const routes = [
         component: SongList
       }
     ]
+  },
+  {
+    path: '/songdetails',
+    component: SongDetails
+  },
+  {
+    path: '/daily',
+    component: Daily
   }
 ]
 

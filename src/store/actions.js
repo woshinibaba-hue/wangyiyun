@@ -1,5 +1,4 @@
 import axios from '../netWork/request'
-import Vue from 'vue'
 export default {
   // context 是actions 默认传递的参数 代表上下文
   // payload 就是调用actions 传递过来的参数
@@ -9,10 +8,10 @@ export default {
       const { data } = await axios.get('/song/url', { params: { id: payload } })
       if (!data[0].url) {
         alert('播放源已失效')
-        return
+      } else {
+        context.commit('SetMusic', [data, payload])
+        context.dispatch('getMusicDetail', payload)
       }
-      context.commit('SetMusic', [data, payload])
-      context.dispatch('getMusicDetail', payload)
     } catch (error) {
       console.log(error, '出错啦')
     }

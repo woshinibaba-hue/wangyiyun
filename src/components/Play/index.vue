@@ -1,14 +1,15 @@
 <template>
+  <!-- 播放 -->
   <div class="wrap">
     <el-collapse-transition>
       <div class="playMusic" v-show="isShow">
         <div class="left">
           <div class="play-img">
-            <img :src="playMuisc.al.picUrl" alt="" />
+            <img :src="playMuisc.al && playMuisc.al.picUrl" alt="" />
           </div>
           <div>
-            <p class="album">{{ playMuisc.name }}</p>
-            <p class="singer">{{ playMuisc.ar[0].name }}</p>
+            <p class="album">{{ playMuisc && playMuisc.name }}</p>
+            <p class="singer">{{ playMuisc && playMuisc.ar[0].name }}</p>
           </div>
         </div>
         <div class="center">
@@ -20,8 +21,8 @@
         </div>
         <div class="progress-warp">
           <span class="start-time">{{ MusicTime }}</span>
-          <div class="progress" @click="click">
-            <el-progress :percentage="percentage" :color="customColor" :show-text="false" class="progress-btn"></el-progress>
+          <div class="progress" @click="playBack">
+            <el-progress v-if="percentage" :percentage="percentage" :color="customColor" :show-text="false" class="progress-btn"></el-progress>
           </div>
           <span class="end-time">{{ playMuisc.dt | formatTime }}</span>
           <div>
@@ -31,7 +32,7 @@
           </div>
         </div>
         <div class="Lrc">
-          <ul class="lrc-item">
+          <ul class="lrc-item" :style="{ 'margin-top': marginTop }">
             <!-- class="current" 歌词高亮 -->
             <li :class="{ current: i == index - 1 }" v-for="(item, i) in lrc" :key="i">{{ item }}</li>
           </ul>
@@ -49,14 +50,15 @@ export default {
     return {
       flag: true,
       percentage: 0, // 进度条百分比
-      customColor: '#c10d0c', // 进度表前景色
-      MusicTime: '00:00',
+      customColor: '#c10d0c', // 进度条前景色
+      MusicTime: '00:00', // 当前播放音乐时长
       model: 1,
       random: 0,
       isShow: true,
       lrc: [], // 歌词
       lcrTime: [],
-      index: 0
+      index: 0,
+      marginTop: '0px' // 歌词滚动距离
     }
   },
   mounted() {},
@@ -66,16 +68,16 @@ export default {
   methods: {
     // 音乐播放完毕之后执行,自动切换下一首
     ended() {
-      let lrcItem = document.querySelector('.lrc-item')
       if (this.model == 0) {
         let player = document.querySelector('.player')
         player.currentTime = 0
-        lrcItem.style.marginTop = 0
         this.index = 0
+        this.percentage = 0
         player.play()
       } else {
         this.toggleMusic(1)
-        lrcItem.style.marginTop = 0
+        this.marginTop = '0px'
+        this.percentage = 0
         this.index = 0
       }
     },
@@ -83,7 +85,7 @@ export default {
     timeupdate(e) {
       let m = parseInt(e.target.currentTime) / 60
       let s = parseInt(e.target.currentTime) % 60
-      let lrcItem = document.querySelector('.lrc-item')
+      // let lrcItem = document.querySelector('.lrc-item')
       this.MusicTime =
         parseInt(m)
           .toString()
@@ -96,7 +98,8 @@ export default {
       this.percentage = (e.target.currentTime / ss) * 100
       if (parseFloat(this.lcrTime[this.index]) <= parseFloat(e.target.currentTime.toFixed(2))) {
         this.index = this.index + 1
-        lrcItem.style.marginTop = -(this.index - 3) * 16 + 'px'
+        this.marginTop = -(this.index - 3) * 16 + 'px'
+        // lrcItem.style.marginTop = -(this.index - 3) * 16 + 'px'
       }
     },
     // 点击播放暂停按钮
@@ -136,7 +139,7 @@ export default {
                 this.$store.dispatch('getMusic', this.musicList[index + 1].id)
                 this.getLrc(this.musicList[index + 1].id)
               }
-              lrcItem.style.marginTop = 0
+              this.marginTop = '0px'
               this.index = 0
             } else if (type == 0) {
               // 上一首
@@ -147,7 +150,7 @@ export default {
                 this.$store.dispatch('getMusic', this.musicList[index - 1].id)
                 this.getLrc(this.musicList[index - 1].id)
               }
-              lrcItem.style.marginTop = 0
+              this.marginTop = '0px'
               this.index = 0
             }
           } else {
@@ -160,14 +163,14 @@ export default {
             }
             this.$store.dispatch('getMusic', this.musicList[this.random].id)
             this.getLrc(this.musicList[this.random].id)
-            lrcItem.style.marginTop = 0
+            this.marginTop = '0px'
             this.index = 0
           }
         }
       })
     },
     // 点击进度条切换歌曲播放位置
-    click(e) {
+    playBack(e) {
       let player = document.querySelector('.player')
       let progress = document.querySelector('.progress')
       this.percentage = ((e.pageX - progress.offsetLeft) / 500) * 100
@@ -179,6 +182,7 @@ export default {
       })
       player.play()
     },
+    // 切换播放模式
     toggleModel() {
       if (this.model + 1 > 2) {
         this.model = 0
@@ -188,25 +192,23 @@ export default {
     },
     // 获取歌词
     async getLrc(id) {
+      this.lrc = [] // 清空之前歌词
       const { lrc } = await this.$http.get('/lyric', { params: { id } })
-      let lrcArr = lrc.lyric.split('\n')
-      let time = []
-      let lrc1 = []
-      let t = []
-      let timerRag = /\[(\d*:\d*\.\d*)]/
+      let lrcArr = lrc.lyric.split('\n') // 将字符串歌词分割为数组
+      let time = [] // 格式化之前时间
+      let t = [] // 格式化之后的时间
+      let timerRag = /\[(\d*:\d*\.\d*)]/ // 正则表达式 用于匹配 [] 里面的时间
       lrcArr.forEach(item => {
-        t.push(item.split(timerRag)[1] && item.split(timerRag)[1].split(':'))
-        lrc1.push(item.split(timerRag)[2])
+        t.push(item.split(timerRag)[1] && item.split(timerRag)[1].split(':')) // 将分钟与秒进行分割，分割为一个新数组
+        this.lrc.push(item.split(timerRag)[2]) // 将歌词保存
       })
-      t.pop()
-      lrc1.pop()
+      t.pop() // 删除最后一个元素
       t.forEach(item => {
         let m = parseInt(item[0]) * 60
         let s = parseFloat(item[1])
         time.push((m + s).toFixed(2))
       })
-      this.lrc = lrc1
-      this.lcrTime = time
+      this.lcrTime = time // 将转换之后的时间保存到data当中
     }
   }
 }
@@ -304,7 +306,7 @@ export default {
   line-height: 20px;
   padding: 5px;
   font-size: 14px;
-  background-color: red;
+  background-color: rgba(0, 0, 0, 0.1);
   color: #fff;
   border-radius: 5px;
   border-bottom-left-radius: 0;

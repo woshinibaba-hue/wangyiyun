@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="warp">
     朋友
   </div>
 </template>

@@ -13,7 +13,8 @@ let state = {
   playMuisc: {}, // 当前播放音乐详情
   UserInfo: {
     isLogin: false
-  } // 当前用户信息
+  }, // 当前用户信息
+  threadId: '' // 动态Id
 }
 
 export default new Vuex.Store({

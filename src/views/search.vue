@@ -46,13 +46,13 @@
               <li v-for="item in resList" :key="item.id">
                 <div>
                   <img :src="item.cover" alt="" class="mv-cover" />
-                  <span class="iconfont icon-shipin shipin">&nbsp;{{ item.playCount | playNum }}万</span>
+                  <span class="iconfont icon-shipin shipin">&nbsp;{{ item.playCount | playNum }}</span>
                   <span class="MV-SJ">{{ item.duration | formatTime }}</span>
                 </div>
                 <p class="mv-title">{{ item.name }}</p>
-                <span class="mv-sing"
-                  >{{ item.name }} / <i class="sing">{{ item.artistName }}</i></span
-                >
+                <p class="mv-sing">
+                  {{ item.name }} / <i class="sing">{{ item.artistName }}</i>
+                </p>
               </li>
             </ul>
           </div>
@@ -60,12 +60,10 @@
       </div>
       <el-pagination background layout="prev, pager, next" :total="count" :page-size="size" @current-change="handleChange"> </el-pagination>
     </div>
-    <Floor />
   </div>
 </template>
 
 <script>
-import Floor from '../components/Floor'
 import { mapState } from 'vuex'
 export default {
   data() {
@@ -77,9 +75,6 @@ export default {
       page: 1, // 页码
       type: 1 // 搜索类型
     }
-  },
-  components: {
-    Floor
   },
   computed: {
     ...mapState(['musicId'])
@@ -255,6 +250,7 @@ li:hover {
   width: 185px;
   height: 130px;
   padding: 10px 0;
+  margin: 0 10px;
   cursor: pointer;
 }
 .shipin {
@@ -280,12 +276,17 @@ li:hover {
 .mv-cover {
   width: 90%;
 }
-.mv-title {
+.mv-title,
+.mv-sing {
   font-size: 14px;
   font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .mv-sing {
   font-size: 10px;
+  font-weight: 400;
 }
 .sing {
   color: #0c73c2;

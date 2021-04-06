@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="warp">
     音乐人
   </div>
 </template>

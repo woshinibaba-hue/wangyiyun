@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="warp">
     客户端
   </div>
 </template>

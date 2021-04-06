@@ -4,6 +4,7 @@
     <Login v-if="showLogin" @show="show" />
     <router-view />
     <Play v-if="musicId" />
+    <Floor></Floor>
   </div>
 </template>
 
@@ -11,18 +12,21 @@
 import Header from './components/Header'
 import Login from './components/Login'
 import Play from './components/Play'
+import Floor from './components/Floor'
 import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
-      showLogin: false
+      showLogin: false,
+      i: 0
     }
   },
   components: {
     Header,
     Login,
-    Play
+    Play,
+    Floor
   },
   computed: {
     ...mapState(['musicId'])

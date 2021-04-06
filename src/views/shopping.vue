@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="warp">
     商城
   </div>
 </template>

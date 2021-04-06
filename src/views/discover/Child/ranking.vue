@@ -47,11 +47,11 @@
             </div>
             <div class="btns">
               <span class="play iconfont icon-bofang">播放</span>
-              <span class="add iconfont icon-tianjia">下载</span>
-              <span class="collect iconfont icon-shoucang">(99999)</span>
-              <span class="share iconfont icon-fenxiang">(10000)</span>
+              <span class="add iconfont icon-tianjia">添加</span>
+              <span class="collect iconfont icon-shoucang">({{ playList.subscribedCount }})</span>
+              <span class="share iconfont icon-fenxiang">({{ playList.shareCount }})</span>
               <span class="dow iconfont icon-xiazai">下载</span>
-              <span class="comment iconfont icon-pinglun">(9999)</span>
+              <span class="comment iconfont icon-pinglun">({{ playList.commentCount }})</span>
             </div>
           </div>
         </div>
@@ -65,55 +65,25 @@
               >播放: <span class="count red">{{ playList.playCount | playNum }}</span> 万次</span
             >
           </div>
-          <div class="song_list">
-            <table>
-              <thead>
-                <tr>
-                  <td></td>
-                  <td>标题</td>
-                  <td>时长</td>
-                  <td>歌手</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr @click="playMusic(item.id)" :class="{ geh: (index + 1) % 2 == 0, currentPlay: musicId == item.id }" v-for="(item, index) in playList.tracks" :key="item.id">
-                  <td class="ranking">
-                    {{ index + 1 }}
-                    <i class="u-icon jt-icon"></i>
-                  </td>
-                  <td>
-                    <div class="song">
-                      <img v-if="index + 1 <= 3" :src="item.al.picUrl" alt="" class="song-img" />
-                      <i class="iconfont icon-bofang bofang"></i>
-                      <span class="song-name">{{ item.name }}</span>
-                    </div>
-                  </td>
-                  <td class="song-date">
-                    {{ item.dt | formatTime }}
-                  </td>
-                  <td class="sing-name">
-                    {{ item.ar[0].name }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- 音乐列表 -->
+          <div>
+            <SongList :playList="playList.tracks"></SongList>
           </div>
         </div>
       </div>
     </div>
-    <Floor />
   </div>
 </template>
 
 <script>
-import Floor from '../../../components/Floor'
 import { mapState } from 'vuex'
+import SongList from '../../../components/SongList'
 export default {
   data() {
     return {
       featureList: [], // 特色榜单
       mediaList: [], // 媒体榜单
-      currentId: 19723756, // 当前点击的榜单id
+      currentId: '', // 当前点击的榜单id
       playList: {} // 榜单详情
     }
   },
@@ -121,9 +91,10 @@ export default {
     ...mapState(['musicId'])
   },
   components: {
-    Floor
+    SongList
   },
   created() {
+    this.currentId = this.$route.query.id ? this.$route.query.id : '19723756'
     this.getAllTop()
     this.getTopDetails(this.currentId)
   },
@@ -143,11 +114,6 @@ export default {
     async getTopDetails(id) {
       const { playlist } = await this.$http.get('/playlist/detail', { params: { id } })
       this.playList = playlist
-    },
-    // 点击歌曲播放音乐
-    playMusic(id) {
-      this.$store.dispatch('getMusic', id)
-      this.$store.commit('SetMusicList', this.playList.tracks)
     }
   }
 }
@@ -275,53 +241,5 @@ export default {
   font-size: 12px;
   font-weight: normal;
   color: #999;
-}
-.song_list {
-  border: 1px solid #c4c4c4;
-  border-top: 2px solid #c10d0c;
-}
-table {
-  border-collapse: collapse;
-  font-size: 12px;
-  color: #999;
-  cursor: pointer;
-}
-thead tr td {
-  border-top: 0;
-  border: 1px solid #c4c4c4;
-  border-right: 0;
-  padding: 5px 10px;
-}
-thead tr td:first-child {
-  border-left: 0;
-}
-tbody tr td {
-  padding: 5px 10px;
-}
-.ranking {
-  width: 100px;
-}
-.song {
-  width: 400px;
-  display: flex;
-  align-items: center;
-}
-.bofang {
-  margin-left: 30px;
-}
-.jt-icon {
-  float: right;
-  width: 20px;
-  height: 20px;
-  background-position: -74px -299px;
-}
-.song-date {
-  width: 100px;
-}
-.sing-name {
-  width: 200px;
-}
-.geh {
-  background-color: #f7f7f7;
 }
 </style>

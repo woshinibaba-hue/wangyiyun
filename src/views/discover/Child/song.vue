@@ -3,22 +3,18 @@
     <div class="warp">
       <div class="songlist-header">
         <div class="option-warp">
-          <h2>全部</h2>
+          <h2>{{ currentName }}</h2>
           <el-button @click="flag = !flag" size="small">选择分类<i class="el-icon-arrow-down el-icon--right"></i></el-button>
           <div class="options" v-if="flag">
             <div class="h-fg">
-              <p>全部风格</p>
+              <p :class="{ currentName: currentName == '全部' }" @click="toggle('全部')">全部</p>
             </div>
             <div class="details">
               <dl>
                 <dt><i class="iconfont icon-diqiu"></i>语种</dt>
                 <dd>
                   <ul>
-                    <li>华语</li>
-                    <li>欧美</li>
-                    <li>日语</li>
-                    <li>韩语</li>
-                    <li>俄语</li>
+                    <li :class="{ currentName: currentName == item.name }" @click="toggle(item.name)" v-for="item in this[0]" :key="item.index">{{ item.name }}</li>
                   </ul>
                 </dd>
               </dl>
@@ -26,28 +22,7 @@
                 <dt><i class="iconfont icon-gangqin"></i>风格</dt>
                 <dd>
                   <ul>
-                    <li>流行</li>
-                    <li>摇滚</li>
-                    <li>电子</li>
-                    <li>舞曲</li>
-                    <li>说唱</li>
-                    <li>轻音乐</li>
-                    <li>爵士</li>
-                    <li>乡村</li>
-                    <li>R&B/Soul</li>
-                    <li>古典</li>
-                    <li>民族</li>
-                    <li>英伦</li>
-                    <li>金属</li>
-                    <li>朋克</li>
-                    <li>蓝调</li>
-                    <li>雷鬼</li>
-                    <li>世界音乐</li>
-                    <li>拉丁</li>
-                    <li>New Age</li>
-                    <li>古风</li>
-                    <li>后摇</li>
-                    <li>Bossa Nova</li>
+                    <li :class="{ currentName: currentName == item.name }" @click="toggle(item.name)" v-for="item in this[1]" :key="item.index">{{ item.name }}</li>
                   </ul>
                 </dd>
               </dl>
@@ -55,18 +30,7 @@
                 <dt><i class="iconfont icon-Coffee"></i>场景</dt>
                 <dd>
                   <ul>
-                    <li>清晨</li>
-                    <li>夜晚</li>
-                    <li>学习</li>
-                    <li>工作</li>
-                    <li>午休</li>
-                    <li>下午茶</li>
-                    <li>地铁</li>
-                    <li>驾车</li>
-                    <li>运动</li>
-                    <li>旅行</li>
-                    <li>散步</li>
-                    <li>酒吧</li>
+                    <li :class="{ currentName: currentName == item.name }" @click="toggle(item.name)" v-for="item in this[2]" :key="item.index">{{ item.name }}</li>
                   </ul>
                 </dd>
               </dl>
@@ -74,18 +38,7 @@
                 <dt><i class="iconfont icon-biaoqing"></i>情感</dt>
                 <dd>
                   <ul>
-                    <li>怀旧</li>
-                    <li>清新</li>
-                    <li>浪漫</li>
-                    <li>伤感</li>
-                    <li>治愈</li>
-                    <li>放松</li>
-                    <li>孤独</li>
-                    <li>感动</li>
-                    <li>兴奋</li>
-                    <li>快乐</li>
-                    <li>安静</li>
-                    <li>思恋</li>
+                    <li :class="{ currentName: currentName == item.name }" @click="toggle(item.name)" v-for="item in this[3]" :key="item.index">{{ item.name }}</li>
                   </ul>
                 </dd>
               </dl>
@@ -93,24 +46,7 @@
                 <dt><i class="iconfont icon-yinyue"></i>主题</dt>
                 <dd>
                   <ul>
-                    <li>综艺</li>
-                    <li>影视原声</li>
-                    <li>ACG</li>
-                    <li>儿童</li>
-                    <li>校园</li>
-                    <li>游戏</li>
-                    <li>70后</li>
-                    <li>80后</li>
-                    <li>90后</li>
-                    <li>网络歌曲</li>
-                    <li>KTV</li>
-                    <li>金典</li>
-                    <li>翻唱</li>
-                    <li>吉他</li>
-                    <li>钢琴</li>
-                    <li>器乐</li>
-                    <li>榜单</li>
-                    <li>00后</li>
+                    <li :class="{ currentName: currentName == item.name }" @click="toggle(item.name)" v-for="item in this[4]" :key="item.index">{{ item.name }}</li>
                   </ul>
                 </dd>
               </dl>
@@ -121,129 +57,83 @@
       </div>
       <div class="song-list">
         <ul>
-          <li>
+          <li v-for="item in songList" :key="item.id" @click="go(item.id)">
             <div class="song-img">
-              <img src="http://p3.music.126.net/uQ6HytnGhIsYrWo_buQe6g==/109951165845348997.jpg?param=140y140" alt="" />
+              <img :src="item.coverImgUrl" alt="" />
               <div class="msk">
-                <i class="iconfont icon-erji erji"> 999 万</i>
+                <i class="iconfont icon-erji erji"> {{ item.playCount | playNum }}</i>
                 <i class="iconfont icon-bofang bof"></i>
               </div>
             </div>
-            <p class="introduce">呵呵呵呵或金合欢花或或哈哈哈</p>
+            <p class="introduce">{{ item.name }}</p>
             <div>
               <span class="s-fc4">by</span>
-              <span class="list-name">云音乐官方歌单</span>
-              <img class="icon" src="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4788940880/1a1f/68f5/b59a/b444b81b88567108ba88194fa29144f5.png" alt="" />
-            </div>
-          </li>
-          <li>
-            <div class="song-img">
-              <img src="http://p3.music.126.net/uQ6HytnGhIsYrWo_buQe6g==/109951165845348997.jpg?param=140y140" alt="" />
-              <div class="msk">
-                <i class="iconfont icon-erji erji"> 999 万</i>
-                <i class="iconfont icon-bofang bof"></i>
-              </div>
-            </div>
-            <p class="introduce">呵呵呵呵或金合欢花或或哈哈哈</p>
-            <div>
-              <span class="s-fc4">by</span>
-              <span class="list-name">云音乐官方歌单</span>
-              <img class="icon" src="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4788940880/1a1f/68f5/b59a/b444b81b88567108ba88194fa29144f5.png" alt="" />
-            </div>
-          </li>
-          <li>
-            <div class="song-img">
-              <img src="http://p3.music.126.net/uQ6HytnGhIsYrWo_buQe6g==/109951165845348997.jpg?param=140y140" alt="" />
-              <div class="msk">
-                <i class="iconfont icon-erji erji"> 999 万</i>
-                <i class="iconfont icon-bofang bof"></i>
-              </div>
-            </div>
-            <p class="introduce">呵呵呵呵或金合欢花或或哈哈哈</p>
-            <div>
-              <span class="s-fc4">by</span>
-              <span class="list-name">云音乐官方歌单</span>
-              <img class="icon" src="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4788940880/1a1f/68f5/b59a/b444b81b88567108ba88194fa29144f5.png" alt="" />
-            </div>
-          </li>
-          <li>
-            <div class="song-img">
-              <img src="http://p3.music.126.net/uQ6HytnGhIsYrWo_buQe6g==/109951165845348997.jpg?param=140y140" alt="" />
-              <div class="msk">
-                <i class="iconfont icon-erji erji"> 999 万</i>
-                <i class="iconfont icon-bofang bof"></i>
-              </div>
-            </div>
-            <p class="introduce">呵呵呵呵或金合欢花或或哈哈哈</p>
-            <div>
-              <span class="s-fc4">by</span>
-              <span class="list-name">云音乐官方歌单</span>
-              <img class="icon" src="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4788940880/1a1f/68f5/b59a/b444b81b88567108ba88194fa29144f5.png" alt="" />
-            </div>
-          </li>
-          <li>
-            <div class="song-img">
-              <img src="http://p3.music.126.net/uQ6HytnGhIsYrWo_buQe6g==/109951165845348997.jpg?param=140y140" alt="" />
-              <div class="msk">
-                <i class="iconfont icon-erji erji"> 999 万</i>
-                <i class="iconfont icon-bofang bof"></i>
-              </div>
-            </div>
-            <p class="introduce">呵呵呵呵或金合欢花或或哈哈哈</p>
-            <div>
-              <span class="s-fc4">by</span>
-              <span class="list-name">云音乐官方歌单</span>
-              <img class="icon" src="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4788940880/1a1f/68f5/b59a/b444b81b88567108ba88194fa29144f5.png" alt="" />
-            </div>
-          </li>
-          <li>
-            <div class="song-img">
-              <img src="http://p3.music.126.net/uQ6HytnGhIsYrWo_buQe6g==/109951165845348997.jpg?param=140y140" alt="" />
-              <div class="msk">
-                <i class="iconfont icon-erji erji"> 999 万</i>
-                <i class="iconfont icon-bofang bof"></i>
-              </div>
-            </div>
-            <p class="introduce">呵呵呵呵或金合欢花或或哈哈哈</p>
-            <div>
-              <span class="s-fc4">by</span>
-              <span class="list-name">云音乐官方歌单</span>
-              <img class="icon" src="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4788940880/1a1f/68f5/b59a/b444b81b88567108ba88194fa29144f5.png" alt="" />
-            </div>
-          </li>
-          <li>
-            <div class="song-img">
-              <img src="http://p3.music.126.net/uQ6HytnGhIsYrWo_buQe6g==/109951165845348997.jpg?param=140y140" alt="" />
-              <div class="msk">
-                <i class="iconfont icon-erji erji"> 999 万</i>
-                <i class="iconfont icon-bofang bof"></i>
-              </div>
-            </div>
-            <p class="introduce">呵呵呵呵或金合欢花或或哈哈哈</p>
-            <div>
-              <span class="s-fc4">by</span>
-              <span class="list-name">云音乐官方歌单</span>
-              <img class="icon" src="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4788940880/1a1f/68f5/b59a/b444b81b88567108ba88194fa29144f5.png" alt="" />
+              <span class="list-name">{{ item.creator.nickname }}</span>
+              <img class="icon" :src="item.creator.avatarDetail && item.creator.avatarDetail.identityIconUrl" alt="" />
             </div>
           </li>
         </ul>
       </div>
-      <el-pagination background layout="prev, pager, next" :total="1000"> </el-pagination>
+      <el-pagination background layout="prev, pager, next" :total="total" @current-change="handlePage"> </el-pagination>
     </div>
-    <Floor></Floor>
   </div>
 </template>
 
 <script>
-import Floor from '../../../components/Floor'
 export default {
   data() {
     return {
-      flag: false
+      flag: false,
+      0: [], // 语种分类
+      1: [], // 风格分类
+      2: [], // 场景分类
+      3: [], // 情感分类
+      4: [], // 主题分类
+      all: {}, // 全部分类
+      currentName: '全部', // 当前点击的分类名称
+      songList: [], // 歌单
+      total: 0, // 歌单数目
+      page: 1 // 当前页码
     }
   },
-  components: {
-    Floor
+  created() {
+    this.getPlayList()
+    this.getSongList()
+  },
+  methods: {
+    //获取歌单分类列表数据
+    async getPlayList() {
+      const res = await this.$http.get('/playlist/catlist')
+      this.all = res.all
+      Object.getOwnPropertyNames(res.categories).forEach(item => {
+        res.sub.forEach((i, index) => {
+          if (i.category == item) {
+            i.index = index + 1
+            this[item].push(i)
+          }
+        })
+      })
+    },
+    // 获取歌单数据
+    async getSongList() {
+      const res = await this.$http.get('/top/playlist', { params: { cat: this.currentName, limit: 15, offset: (this.page - 1) * 15 } })
+      this.songList = res.playlists
+      this.total = res.total
+      this.flag = false
+    },
+    // 当页码数发送改变的时候触发
+    handlePage(newPage) {
+      this.page = newPage
+      this.getSongList()
+    },
+    // 点击分类时触发
+    toggle(val) {
+      this.currentName = val
+      this.getSongList()
+    },
+    go(id) {
+      this.$router.push(`/songdetails?id=${id}`)
+    }
   }
 }
 </script>
@@ -381,7 +271,8 @@ export default {
 .bof {
   font-size: 18px;
 }
-.song-list ul li .introduce {
+.song-list ul li .introduce,
+.list-name {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -394,6 +285,9 @@ export default {
   color: #999;
 }
 .list-name {
+  display: inline-block;
+  width: 90px;
+  text-align: center;
   font-size: 10px;
   color: #666;
   margin: 0 3px;
@@ -401,5 +295,8 @@ export default {
 .icon {
   width: 13px;
   vertical-align: middle;
+}
+.currentName {
+  color: #ab0e0e;
 }
 </style>

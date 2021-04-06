@@ -1,10 +1,11 @@
 <template>
+  <!-- 头部 -->
   <div class="box">
     <div class="wrap">
       <div class="logo"></div>
       <ul class="main">
         <li @click="goTo('/discover')" :class="{ current: $route.path.indexOf('/discover') !== -1 }">发现音乐</li>
-        <li @click="goTo('/my')" :class="{ current: $route.path == '/my' }">我的音乐</li>
+        <li @click="goTo('/mymusic')" :class="{ current: $route.path == '/mymusic' }">我的音乐</li>
         <li @click="goTo('/friend')" :class="{ current: $route.path == '/friend' }">朋友</li>
         <li @click="goTo('/shopping')" :class="{ current: $route.path == '/shopping' }">商城</li>
         <li @click="goTo('/musician')" :class="{ current: $route.path == '/musician' }">音乐人</li>
@@ -15,11 +16,11 @@
         <input v-model="search" class="input" v-on:keyup.enter="toSearch" placeholder="音乐/视频/电台/用户" />
         <span class="creation">创作者中心</span>
       </div>
-      <div v-if="UserInfo.isLogin" class="avatar" @click="click">
-        <img :src="UserInfo.profile.avatarUrl" alt="" />
-      </div>
-      <div class="login" v-else>
+      <div class="login" v-if="!UserInfo.isLogin">
         <p class="login-btn" @click="login">登录</p>
+      </div>
+      <div class="avatar" @click="click" v-else>
+        <img :src="UserInfo.profile.avatarUrl" alt="" />
       </div>
       <div class="login-avatar" v-if="isShow">
         <ul>
@@ -94,7 +95,6 @@ export default {
 </script>
 
 <style scoped>
-@import '../../assets/font/iconfont.css';
 .box {
   width: 100%;
   height: 70px;
@@ -180,13 +180,12 @@ export default {
   font-size: 14px;
   line-height: 70px;
   margin-left: -50px;
+  cursor: pointer;
 }
 .login-btn {
-  opacity: 0.5;
+  opacity: 0.9;
   color: #fff;
-}
-.login-btn:hover {
-  opacity: 1;
+  cursor: pointer;
 }
 .avatar {
   position: absolute;

@@ -104,12 +104,10 @@
       </div>
       <router-view v-else @flag1="flag2" />
     </div>
-    <Floor></Floor>
   </div>
 </template>
 
 <script>
-import Floor from '../../components/Floor'
 import { mapState } from 'vuex'
 export default {
   data() {
@@ -119,9 +117,6 @@ export default {
       songList: [], // 完整记录
       partList: [] // 部分记录
     }
-  },
-  components: {
-    Floor
   },
   computed: {
     ...mapState(['UserInfo', 'musicId'])

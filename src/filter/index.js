@@ -3,7 +3,7 @@ import Vue from 'vue'
 // 播放次数
 Vue.filter('playNum', count => {
   if (count > 100000) {
-    return parseInt(count / 10000)
+    return parseInt(count / 10000) + '万'
   } else {
     return count
   }

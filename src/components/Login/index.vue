@@ -1,4 +1,5 @@
 <template>
+  <!-- 登录 -->
   <div class="loginBox">
     <div class="title">
       <span>登录</span>
@@ -99,6 +100,7 @@ export default {
       } else {
         this.showMessage('登录成功', 'success')
         this.$emit('show', false)
+        this.getId()
         this.$store.commit('SetUserInfo', res)
       }
     },
@@ -108,6 +110,11 @@ export default {
         message,
         type
       })
+    },
+    // 获取动态id
+    async getId() {
+      const { event } = await this.$http.get('/event')
+      this.$store.commit('SetThreadId', event[0].info.threadId)
     }
   }
 }

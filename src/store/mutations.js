@@ -16,5 +16,9 @@ export default {
   SetUserInfo(state, payload) {
     state.UserInfo = payload
     state.UserInfo.isLogin = true
+  },
+  // 设置动态ID
+  SetThreadId(state, payload) {
+    state.threadId = payload
   }
 }

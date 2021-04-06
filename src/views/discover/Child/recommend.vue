@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="slideshow">
-      <el-carousel :interval="2000" type="card" autoplay height="300px">
+      <div class="blur" :style="{ 'background-image': 'url(' + currentImg + ')' }"></div>
+      <el-carousel :interval="2000" autoplay height="300px" @change="toggle">
         <el-carousel-item v-for="(item, index) in imgs" :key="index">
           <img class="imgItem" :src="item.imageUrl" alt="" />
         </el-carousel-item>
@@ -22,10 +23,10 @@
           </div>
           <div class="hot">
             <ul>
-              <li v-for="item in hotList" :key="item.id">
+              <li v-for="item in hotList" :key="item.id" @click="goPlsyList(item.id)">
                 <span class="mask">
                   <span class="icon-headset"></span>
-                  <span class="count">{{ item.playCount | playNum }}万</span>
+                  <span class="count">{{ item.playCount | playNum }}</span>
                   <span class="icon-play"></span>
                 </span>
                 <img :src="item.picUrl" alt="" />
@@ -34,53 +35,33 @@
             </ul>
           </div>
         </div>
-        <!-- 新碟上架 -->
-        <div>
+        <!-- 个性化推荐 -->
+        <div v-if="UserInfo.isLogin">
           <div class="childNav">
             <span class="icon">
-              <h3>新碟上架</h3>
+              <h3>个性化推荐</h3>
             </span>
-            <span class="more">更多</span>
           </div>
           <div class="new_disc">
-            <el-carousel arrow="always" height="140px" loop indicator-position="none" :autoplay="false" @change="handelChange">
-              <el-carousel-item>
-                <ul>
-                  <li v-for="item in newSong" :key="item.id">
-                    <span class="msk">
-                      <img :src="item.picUrl" alt="" />
-                      <span class="album">{{ item.name }}</span>
-                      <span class="song">{{ item.artists[0].name }}</span>
-                    </span>
-                    <span class="play"></span>
-                  </li>
-                </ul>
-              </el-carousel-item>
-              <el-carousel-item>
-                <ul>
-                  <li v-for="item in newSong" :key="item.id">
-                    <span class="msk">
-                      <img :src="item.picUrl" alt="" />
-                      <span class="album">{{ item.name }}</span>
-                      <span class="song">{{ item.artists[0].name }}</span>
-                    </span>
-                    <span class="play"></span>
-                  </li>
-                </ul>
-              </el-carousel-item>
-              <el-carousel-item>
-                <ul>
-                  <li v-for="item in newSong" :key="item.id">
-                    <span class="msk">
-                      <img :src="item.picUrl" alt="" />
-                      <span class="album">{{ item.name }}</span>
-                      <span class="song">{{ item.artists[0].name }}</span>
-                    </span>
-                    <span class="play"></span>
-                  </li>
-                </ul>
-              </el-carousel-item>
-            </el-carousel>
+            <div class="daily" @click="go">
+              <DateBg />
+              <p class="dec">每日歌曲推荐</p>
+              <p class="update">根据你的口味生成，每天6:00更新</p>
+            </div>
+            <ul>
+              <li v-for="item in recommends" :key="item.id" @click="goPlsyList(item.id)">
+                <div class="disc-img">
+                  <img :src="item.picUrl" alt="" />
+                </div>
+                <div class="mask1">
+                  <span class="count">{{ item.playcount | playNum }}</span>
+                  <span class="icon-play"></span>
+                  <span class="icon-headset"></span>
+                </div>
+                <p class="text">{{ item.name }}</p>
+                <p class="like-t">{{ item.copywriter }}</p>
+              </li>
+            </ul>
           </div>
         </div>
         <!-- 榜单 -->
@@ -113,7 +94,7 @@
                     </div>
                   </li>
                   <li class="interleave">
-                    <span class="examine">查看全部 ></span>
+                    <span class="examine" @click="goRanking(item.id)">查看全部 ></span>
                   </li>
                 </ul>
               </div>
@@ -139,7 +120,6 @@
             <img :src="item.picUrl" alt="" class="sing-pic" />
             <div class="details">
               <h4>{{ item.name }}</h4>
-              <!-- <p>台湾歌手张惠妹</p> -->
             </div>
           </li>
         </ul>
@@ -155,62 +135,56 @@
               <img :src="item.avatarUrl" alt="" class="avatar-img" />
               <div class="hotInfo">
                 <p class="hotName">{{ item.nickName }}</p>
-                <!-- <p>心理学家、美食家陈立教授</p> -->
               </div>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <Floor />
   </div>
 </template>
 
 <script>
-import Floor from '../../../components/Floor'
+import { mapState } from 'vuex'
+import DateBg from '../../../components/Date'
 export default {
   data() {
     return {
       imgs: [], // 轮播图
       classify: ['华语', '流行', '摇滚', '民谣', '电子'],
       hotList: [], // 热门推荐歌单
-      newSong: [], // 新碟上架歌曲
       topList: [], // 榜单名
       hotPop: [], // 热门主播
-      sings: [] // 歌手
+      sings: [], // 歌手
+      currentImg: '', // 当前轮播图片
+      recommends: [] // 每日推荐歌单
     }
+  },
+  components: {
+    DateBg
   },
   created() {
     this.getHotPop()
     this.getBanner()
     this.getHotList()
-    this.handelChange()
     this.getToplist()
     this.getSinger()
+    this.getResource()
   },
-  components: {
-    Floor
+  computed: {
+    ...mapState(['UserInfo'])
   },
   methods: {
     // 获取轮播图数据
     async getBanner() {
       const { banners } = await this.$http.get('/banner?type=0')
       this.imgs = banners
+      this.currentImg = banners[0].imageUrl
     },
     // 获取热门推荐歌单
     async getHotList() {
       const { result } = await this.$http.get('/personalized?limit=8')
       this.hotList = result
-    },
-    //获取新碟上架歌曲
-    async handelChange(i = 0) {
-      const res = await this.$http.get('/top/album', {
-        params: {
-          limit: 5,
-          offset: (i + 1) * 5
-        }
-      })
-      this.newSong = res.weekData
     },
     // 获取榜单
     async getToplist() {
@@ -226,14 +200,51 @@ export default {
     async getSinger() {
       const { list } = await this.$http.get('/toplist/artist')
       this.sings = list.artists.splice(0, 6)
+    },
+    toggle(i) {
+      this.currentImg = this.imgs[i].imageUrl
+    },
+    // 获取每日推荐歌单
+    async getResource() {
+      let { recommend } = await this.$http.get('/recommend/resource')
+      this.recommends = recommend.splice(0, 3)
+    },
+    go() {
+      this.$router.push('/daily')
+    },
+    // 跳转至歌单详情
+    goPlsyList(id) {
+      this.$router.push(`/songdetails?id=${id}`)
+    },
+    // 跳转至榜单详情
+    goRanking(id) {
+      this.$router.push(`/discover/ranking?id=${id}`)
     }
   }
 }
 </script>
 
 <style scoped>
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
 .slideshow {
   border-bottom: 1px solid #eee;
+}
+.el-carousel {
+  width: 70%;
+  margin-left: 50%;
+  filter: blur(0) !important;
+  transform: translateX(-50%);
+}
+.blur {
+  position: absolute;
+  width: 100%;
+  height: 300px;
+  background-size: 999999px;
+  background-position: right center;
 }
 .main {
   display: flex;
@@ -568,5 +579,63 @@ export default {
 }
 .hotInfo {
   margin-left: 15px;
+}
+.new_disc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.daily {
+  width: 150px;
+}
+.new_disc ul {
+  display: flex;
+  padding-top: 0;
+}
+.new_disc ul li {
+  width: 150px;
+  position: relative;
+  margin-left: 30px;
+  cursor: pointer;
+}
+.disc-img img {
+  width: 140px;
+  height: 140px;
+}
+.mask1 {
+  width: 140px;
+  height: 30px;
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  bottom: 50px;
+}
+.text,
+.like-t {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 5px 0;
+}
+.like-t {
+  font-size: 10px;
+  color: #999;
+  padding: 0;
+}
+.daily {
+  text-align: center;
+  cursor: pointer;
+}
+.dec {
+  font-size: 14px;
+  margin: 5px 0;
+}
+.update {
+  font-size: 10px;
+  color: #999;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>
