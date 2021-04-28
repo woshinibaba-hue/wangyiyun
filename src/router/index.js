@@ -20,6 +20,10 @@ const User = () => import('../views/User/index.vue')
 const SongList = () => import('../views/User/Chlid/SongList.vue')
 const SongDetails = () => import('../views/SongDetails/index.vue')
 const Daily = () => import('../views/Daily/index.vue')
+const Artist = () => import('../views/MyMusic/Chlid/Artist.vue')
+const Mv = () => import('../views/MyMusic/Chlid/Mv.vue')
+const Radio = () => import('../views/MyMusic/Chlid/Radio.vue')
+const Playlist = () => import('../views/MyMusic/Chlid/Playlist.vue')
 
 const routes = [
   {
@@ -74,7 +78,29 @@ const routes = [
   },
   {
     path: '/mymusic',
-    component: MyMusic
+    component: MyMusic,
+    children: [
+      {
+        path: '/mymusic',
+        redirect: 'artist'
+      },
+      {
+        path: 'artist',
+        component: Artist
+      },
+      {
+        path: 'mv',
+        component: Mv
+      },
+      {
+        path: 'radio',
+        component: Radio
+      },
+      {
+        path: 'playlist',
+        component: Playlist
+      }
+    ]
   },
   {
     path: '/shopping',

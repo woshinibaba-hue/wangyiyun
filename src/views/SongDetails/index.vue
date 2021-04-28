@@ -210,7 +210,6 @@ export default {
 }
 .tags span {
   display: inline-block;
-  width: 40px;
   line-height: 22px;
   margin: 0 8px;
   padding: 0 5px;

@@ -4,7 +4,7 @@
     <table>
       <thead>
         <tr>
-          <td>序号</td>
+          <td></td>
           <td>歌曲标题</td>
           <td>时长</td>
           <td>歌手</td>
@@ -63,7 +63,7 @@ export default {
 
 <style scoped>
 .song_list {
-  width: 790px;
+  max-width: 790px;
   border: 1px solid #c4c4c4;
   border-top: 2px solid #c10d0c;
 }
@@ -72,11 +72,11 @@ table {
   font-size: 12px;
   color: #999;
   cursor: pointer;
-  margin-right: -1px;
 }
 thead tr td {
   border: 1px solid #c4c4c4;
   border-right: 0;
+  border-top: 0;
   padding: 10px 16px;
   background-image: linear-gradient(#ffffff, #f0f0f0);
 }
@@ -84,6 +84,7 @@ tbody tr {
   width: 100%;
 }
 tbody tr td {
+  width: 100px;
   padding: 8px 15px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -96,7 +97,7 @@ thead tr td:first-child {
   width: 100px;
 }
 .song {
-  width: 350px;
+  width: 300px;
   display: flex;
   align-items: center;
 }
@@ -105,6 +106,9 @@ thead tr td:first-child {
 }
 .song-wrap {
   margin-bottom: 60px;
+}
+.sing-name {
+  width: 100px;
 }
 .sing-name1 {
   display: inline-block;

@@ -55,20 +55,15 @@
             </div>
           </div>
         </div>
-        <div class="main">
+        <div>
           <div class="song_head">
             <h2>
               歌曲列表
-              <span>{{ playList.trackCount }}首歌</span>
+              <span>999 首歌</span>
             </h2>
-            <span
-              >播放: <span class="count red">{{ playList.playCount | playNum }}</span> 万次</span
-            >
+            <span>播放: <span class="count red">999</span> 万次</span>
           </div>
-          <!-- 音乐列表 -->
-          <div>
-            <SongList :playList="playList.tracks"></SongList>
-          </div>
+          <SongList :playList="playList.tracks"></SongList>
         </div>
       </div>
     </div>
@@ -214,32 +209,6 @@ export default {
   margin-left: 5px;
 }
 .s-update {
-  color: #999;
-}
-.btns span {
-  display: inline-block;
-  width: 80px;
-  border: 1px solid #c4c4c4;
-  font-size: 12px;
-  line-height: 30px;
-  text-align: center;
-  margin-right: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  box-shadow: 0px 0px 7px -1px rgba(0, 0, 0, 0.3);
-}
-.song_head {
-  display: flex;
-  justify-content: space-between;
-  margin: 30px 0 5px 0;
-}
-.song_head h2 {
-  font-weight: normal;
-  font-size: 20px;
-}
-.song_head span {
-  font-size: 12px;
-  font-weight: normal;
   color: #999;
 }
 </style>

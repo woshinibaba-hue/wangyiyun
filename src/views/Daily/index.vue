@@ -32,8 +32,8 @@ export default {
   methods: {
     // 获取每日推荐歌单数据
     async getSongList() {
-      const { recommend } = await this.$http.get('/recommend/songs')
-      this.playList = recommend
+      const { data } = await this.$http.get('/recommend/songs')
+      this.playList = data.dailySongs
     }
   }
 }

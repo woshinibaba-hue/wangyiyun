@@ -31,6 +31,35 @@ i {
 .gehang {
   background-color: #f7f7f7;
 }
+.gaoliang {
+  background-color: #eee;
+}
 .currentPlay {
   color: #c10d0c !important;
+}
+.btns span {
+  display: inline-block;
+  width: 80px;
+  border: 1px solid #c4c4c4;
+  font-size: 12px;
+  line-height: 30px;
+  text-align: center;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0px 0px 7px -1px rgba(0, 0, 0, 0.3);
+}
+.song_head {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0 5px 0;
+}
+.song_head h2 {
+  font-weight: normal;
+  font-size: 20px;
+}
+.song_head span {
+  font-size: 12px;
+  font-weight: normal;
+  color: #999;
 }

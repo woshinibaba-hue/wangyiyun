@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="warp">
     主播电台
   </div>
 </template>

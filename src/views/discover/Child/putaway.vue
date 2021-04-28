@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="warp">
     新碟上架
   </div>
 </template>

@@ -209,7 +209,7 @@ li:hover {
 .singer {
   display: inline-block;
   width: 130px;
-  color: #0c73c2;
+  /* color: #0c73c2; */
 }
 .album {
   display: inline-block;

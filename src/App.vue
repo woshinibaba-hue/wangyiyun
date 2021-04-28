@@ -18,8 +18,8 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      showLogin: false,
-      i: 0
+      showLogin: false
+      // i: 0
     }
   },
   components: {

@@ -2,8 +2,10 @@ import Vue from 'vue'
 
 // 播放次数
 Vue.filter('playNum', count => {
-  if (count > 100000) {
-    return parseInt(count / 10000) + '万'
+  if (count > 100000000) {
+    return (count / 100000000).toFixed(1) + '亿'
+  } else if (count > 100000) {
+    return (count / 10000).toFixed(1) + '万'
   } else {
     return count
   }

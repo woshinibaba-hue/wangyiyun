@@ -32,10 +32,11 @@
           </div>
         </div>
         <div class="Lrc">
-          <ul class="lrc-item" :style="{ 'margin-top': marginTop }">
+          <ul class="lrc-item" :style="{ 'margin-top': marginTop }" v-if="lrc.length">
             <!-- class="current" 歌词高亮 -->
             <li :class="{ current: i == index - 1 }" v-for="(item, i) in lrc" :key="i">{{ item }}</li>
           </ul>
+          <h3 v-else>暂无歌词</h3>
         </div>
       </div>
     </el-collapse-transition>
@@ -194,21 +195,23 @@ export default {
     async getLrc(id) {
       this.lrc = [] // 清空之前歌词
       const { lrc } = await this.$http.get('/lyric', { params: { id } })
-      let lrcArr = lrc.lyric.split('\n') // 将字符串歌词分割为数组
-      let time = [] // 格式化之前时间
-      let t = [] // 格式化之后的时间
-      let timerRag = /\[(\d*:\d*\.\d*)]/ // 正则表达式 用于匹配 [] 里面的时间
-      lrcArr.forEach(item => {
-        t.push(item.split(timerRag)[1] && item.split(timerRag)[1].split(':')) // 将分钟与秒进行分割，分割为一个新数组
-        this.lrc.push(item.split(timerRag)[2]) // 将歌词保存
-      })
-      t.pop() // 删除最后一个元素
-      t.forEach(item => {
-        let m = parseInt(item[0]) * 60
-        let s = parseFloat(item[1])
-        time.push((m + s).toFixed(2))
-      })
-      this.lcrTime = time // 将转换之后的时间保存到data当中
+      if (lrc) {
+        let lrcArr = lrc.lyric.split('\n') // 将字符串歌词分割为数组
+        let time = [] // 格式化之前时间
+        let t = [] // 格式化之后的时间
+        let timerRag = /\[(\d*:\d*\.\d*)]/ // 正则表达式 用于匹配 [] 里面的时间
+        lrcArr.forEach(item => {
+          t.push(item.split(timerRag)[1] && item.split(timerRag)[1].split(':')) // 将分钟与秒进行分割，分割为一个新数组
+          this.lrc.push(item.split(timerRag)[2]) // 将歌词保存
+        })
+        t.pop() // 删除最后一个元素
+        t.forEach(item => {
+          let m = parseInt(item[0]) * 60
+          let s = parseFloat(item[1])
+          time.push((m + s).toFixed(2))
+        })
+        this.lcrTime = time // 将转换之后的时间保存到data当中
+      }
     }
   }
 }
