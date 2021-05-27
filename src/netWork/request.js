@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Loading } from 'element-ui'
 
 // 配置axios默认路径
-axios.defaults.baseURL = 'http://musicapi.leanapp.cn/'
+axios.defaults.baseURL = 'http://www.hjmin.com/'
 // 允许跨域请求携带cookie
 axios.defaults.withCredentials = true
 
