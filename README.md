@@ -1,19 +1,34 @@
-# wangyiyun
+# 仿网易云项目 --- vue
 
-## Project setup
+## 下载依赖
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 运行项目
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 打包项目
 ```
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 该项目使用的主要技术栈
+```
+vue
+vue-cli
+vuex
+vue-router
+axios
+element-ui
+```
+### 实现的的主要功能如下
+```
+1. 完成了登录功能，并使用vuex对登录状态进行管理
+2. 实现了多个页面之前相互跳转
+3. 完成了歌曲搜索功能
+4. 完成了歌曲播放功能，如，单曲循环，列表循环，随机播放，歌词渲染即歌词滚动效果
+5. 使用vuex管理播放信息
+```
